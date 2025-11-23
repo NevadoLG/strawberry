@@ -52,6 +52,8 @@ dmypy.json
 *.sublime-*
 *.code-workspace
 
-
+# Imágenes de entrenamiento
+src/data/raw/images/
+src/data/raw/labels/
 # Excepciones
 !requirements.txt

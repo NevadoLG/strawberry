@@ -125,8 +125,9 @@ def yolo_to_coco(
     return out_json
 
 
-yolo_to_coco(
-     images_root="src/data/raw/images",        
-     labels_root="src/data/raw/labels",        
-     output_dir="src/data/processed/coco_out"
-)
+if __name__ == "__main__":
+    yolo_to_coco(
+        images_root="src/data/raw/images",
+        labels_root="src/data/raw/labels",
+        output_dir="src/data/processed/coco_out",
+    )

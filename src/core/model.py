@@ -40,8 +40,8 @@ class Config:
     # Hiperparámetros
     IMAGE_SIZE = 416
     BATCH_SIZE = 8
-    EPOCHS = 70
-    LEARNING_RATE = 0.001  # Reducido para mejor convergencia
+    EPOCHS = 20
+    LEARNING_RATE = 0.0001  # Reducido para mejor convergencia
     WEIGHT_DECAY = 0.0005
     EARLY_STOP_PATIENCE = 10
     SAVE_EVERY = 5
@@ -839,6 +839,16 @@ def train_sgsnet(resume_from_checkpoint=None):
     # Modelo
     model = SGSNet(Config.NUM_CLASSES).to(Config.DEVICE)
     print(f"✓ Modelo creado (parámetros: {sum(p.numel() for p in model.parameters())/1e6:.2f}M)\n")
+    FINE_TUNE_FROM = "src/data/processed/models/best_model_multifresa.pth"
+
+    if resume_from_checkpoint is None:
+        if Path(FINE_TUNE_FROM).exists():
+            print(f"Cargando pesos iniciales desde {FINE_TUNE_FROM} (fine-tuning)")
+            ckpt = torch.load(FINE_TUNE_FROM, map_location=Config.DEVICE, weights_only=False)
+            model.load_state_dict(ckpt["model_state_dict"])
+        else:
+            print("AVISO: no se encontró el checkpoint para fine-tuning, se entrenará desde cero.")
+
 
     # Optimizador y pérdida
     optimizer = optim.AdamW(model.parameters(), lr=Config.LEARNING_RATE, weight_decay=Config.WEIGHT_DECAY)
@@ -1313,7 +1323,7 @@ def main(resume=True):
     print("="*60)
 
 if __name__ == "__main__":
-    main(resume=True)
+    main(resume=False)
 
     """
     result = test_model_on_folder(
