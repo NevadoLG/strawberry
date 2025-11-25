@@ -40,8 +40,8 @@ class Config:
     # Hiperparámetros
     IMAGE_SIZE = 416
     BATCH_SIZE = 8
-    EPOCHS = 20
-    LEARNING_RATE = 0.0001  # Reducido para mejor convergencia
+    EPOCHS = 70
+    LEARNING_RATE = 0.001  # Reducido para mejor convergencia
     WEIGHT_DECAY = 0.0005
     EARLY_STOP_PATIENCE = 10
     SAVE_EVERY = 5
@@ -338,7 +338,7 @@ class SGSNetLoss(nn.Module):
         total_cls_loss = total_cls_loss / total_samples if total_cls_loss != 0 else torch.tensor(0.0, device=predictions.device)
 
         # Pesos ajustados
-        total_loss = 2.0 * total_obj_loss + 5.0 * total_bbox_loss + 2.0 * total_cls_loss   #WEIGHT AJUSTADOS ES LA IMPORTANCIA
+        total_loss = 2.0 * total_obj_loss + 4.0 * total_bbox_loss + 2.0 * total_cls_loss   #WEIGHT AJUSTADOS ES LA IMPORTANCIA
 
         return total_loss, {
             'obj': total_obj_loss.item(),
@@ -839,15 +839,6 @@ def train_sgsnet(resume_from_checkpoint=None):
     # Modelo
     model = SGSNet(Config.NUM_CLASSES).to(Config.DEVICE)
     print(f"✓ Modelo creado (parámetros: {sum(p.numel() for p in model.parameters())/1e6:.2f}M)\n")
-    FINE_TUNE_FROM = "src/data/processed/models/best_model_multifresa.pth"
-
-    if resume_from_checkpoint is None:
-        if Path(FINE_TUNE_FROM).exists():
-            print(f"Cargando pesos iniciales desde {FINE_TUNE_FROM} (fine-tuning)")
-            ckpt = torch.load(FINE_TUNE_FROM, map_location=Config.DEVICE, weights_only=False)
-            model.load_state_dict(ckpt["model_state_dict"])
-        else:
-            print("AVISO: no se encontró el checkpoint para fine-tuning, se entrenará desde cero.")
 
 
     # Optimizador y pérdida
@@ -1044,7 +1035,6 @@ def plot_results(history):
     plt.show()
 
 #verificar si el modelo funciona en una carpeta de imágenes
-
 def test_model_on_image(model_path, image_path, conf_threshold=0.2, save_output=True):
     """
     Función completa para probar el modelo en una imagen con visualización
@@ -1052,7 +1042,7 @@ def test_model_on_image(model_path, image_path, conf_threshold=0.2, save_output=
     Args:
         model_path: ruta al checkpoint del modelo
         image_path: ruta a la imagen a testear
-        conf_threshold: umbral de confianza para mostrar detecciones (default 0.5)
+        conf_threshold: umbral de confianza para mostrar detecciones
         save_output: si guardar la imagen con detecciones
 
     Returns:
@@ -1096,7 +1086,7 @@ def test_model_on_image(model_path, image_path, conf_threshold=0.2, save_output=
     # Usar la misma transformación que en validación
     _, val_transform = get_transforms()
 
-    # IMPORTANTE: Albumentations necesita bboxes vacías
+    # Albumentations necesita bboxes vacías
     transformed = val_transform(image=image_rgb, bboxes=[], class_labels=[])
     image_tensor = transformed['image'].unsqueeze(0).to(Config.DEVICE)
 
@@ -1107,55 +1097,25 @@ def test_model_on_image(model_path, image_path, conf_threshold=0.2, save_output=
     with torch.no_grad():
         predictions = model(image_tensor)
 
-    # Procesar predicciones
-    B, C, H, W = predictions.shape
-    num_anchors = 3
-    pred_reshaped = predictions.view(B, num_anchors, 5 + Config.NUM_CLASSES, H, W)
-    pred_reshaped = pred_reshaped.permute(0, 1, 3, 4, 2).contiguous()
+    # Usar el mismo pipeline que en entrenamiento (NMS + anchors)
+    detections_batch = non_max_suppression(
+        predictions,
+        conf_threshold=conf_threshold,
+        iou_threshold=0.4
+    )
 
-    # Extraer componentes
-    obj_scores = torch.sigmoid(pred_reshaped[0, :, :, :, 0])  # [anchors, H, W]
-    bbox_preds = pred_reshaped[0, :, :, :, 1:5]              # [anchors, H, W, 4]
-    class_preds = torch.sigmoid(pred_reshaped[0, :, :, :, 5:])  # [anchors, H, W, num_classes]
+    boxes, labels, scores = detections_batch[0]  # solo 1 imagen
+    print(f"✓ Detecciones encontradas: {len(boxes)}")
 
-    # Encontrar detecciones con alta confianza
-    detections = []
-    for anchor_idx in range(num_anchors):
-        for gy in range(H):
-            for gx in range(W):
-                obj_conf = obj_scores[anchor_idx, gy, gx].item()
-
-                if obj_conf > conf_threshold:
-                    # Decodificar bbox
-                    dx = bbox_preds[anchor_idx, gy, gx, 0].item()
-                    dy = bbox_preds[anchor_idx, gy, gx, 1].item()
-                    dw = bbox_preds[anchor_idx, gy, gx, 2].item()
-                    dh = bbox_preds[anchor_idx, gy, gx, 3].item()
-
-                    # Convertir a coordenadas absolutas
-                    cx = (gx + dx) / W
-                    cy = (gy + dy) / H
-                    w = dw
-                    h = dh
-
-                    # Obtener clase con mayor confianza
-                    class_scores = class_preds[anchor_idx, gy, gx]
-                    class_conf, class_idx = torch.max(class_scores, dim=0)
-
-                    detections.append({
-                        'bbox': [cx, cy, w, h],
-                        'obj_conf': obj_conf,
-                        'class_idx': class_idx.item(),
-                        'class_conf': class_conf.item(),
-                        'class_name': Config.CLASS_NAMES[class_idx.item()]
-                    })
-
-    print(f"✓ Detecciones encontradas: {len(detections)}")
-
-    # Métricas
-    max_conf = obj_scores.max().item()
-    mean_conf = obj_scores.mean().item()
-    high_conf_count = (obj_scores > conf_threshold).sum().item()
+    # Métricas simples de confianza
+    if len(scores) > 0:
+        max_conf = scores.max().item()
+        mean_conf = scores.mean().item()
+        high_conf_count = int((scores > conf_threshold).sum().item())
+    else:
+        max_conf = 0.0
+        mean_conf = 0.0
+        high_conf_count = 0
 
     print(f"\nMÉTRICAS:")
     print(f"  Confianza máxima: {max_conf:.4f}")
@@ -1165,7 +1125,6 @@ def test_model_on_image(model_path, image_path, conf_threshold=0.2, save_output=
     # 5. VISUALIZACIÓN
     print(f"\n[5/5] Generando visualización...")
 
-    # Crear copia para dibujar
     vis_image = image_rgb.copy()
 
     # Colores para cada clase (RGB)
@@ -1177,28 +1136,34 @@ def test_model_on_image(model_path, image_path, conf_threshold=0.2, save_output=
         (255, 0, 255)     # mature - Magenta
     ]
 
-    for det in detections:
-        # Convertir coordenadas normalizadas a pixeles originales
-        cx, cy, w, h = det['bbox']
+    detections = []  # para devolver info resumida
 
-        # Escalar al tamaño de la imagen redimensionada
+    for box, label_idx, score in zip(boxes, labels, scores):
+        cx, cy, w, h = box.cpu().numpy().tolist()
+
+        # coordenadas en el canvas 416x416
         x1 = int((cx - w/2) * Config.IMAGE_SIZE)
         y1 = int((cy - h/2) * Config.IMAGE_SIZE)
         x2 = int((cx + w/2) * Config.IMAGE_SIZE)
         y2 = int((cy + h/2) * Config.IMAGE_SIZE)
 
-        # Dibujar bbox
-        color = colors[det['class_idx']]
+        color = colors[int(label_idx)]
         cv2.rectangle(vis_image, (x1, y1), (x2, y2), color, 2)
 
-        # Texto con clase y confianza
-        label = f"{det['class_name']}: {det['obj_conf']:.2f}"
+        class_name = Config.CLASS_NAMES[int(label_idx)]
+        label_text = f"{class_name}: {score:.2f}"
 
-        # Fondo para el texto
-        (text_w, text_h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
+        (text_w, text_h), _ = cv2.getTextSize(label_text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
         cv2.rectangle(vis_image, (x1, y1 - text_h - 10), (x1 + text_w, y1), color, -1)
-        cv2.putText(vis_image, label, (x1, y1 - 5),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(vis_image, label_text, (x1, y1 - 5),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+
+        detections.append({
+            "bbox": [cx, cy, w, h],
+            "obj_conf": float(score),
+            "class_idx": int(label_idx),
+            "class_name": class_name
+        })
 
     # Mostrar resultado
     fig, axes = plt.subplots(1, 2, figsize=(16, 8))
@@ -1215,21 +1180,20 @@ def test_model_on_image(model_path, image_path, conf_threshold=0.2, save_output=
 
     # Leyenda de clases
     legend_text = "CLASES:\n"
-    for idx, (name, color) in enumerate(zip(Config.CLASS_NAMES, colors)):
+    for name in Config.CLASS_NAMES:
         legend_text += f"  {name}\n"
 
     plt.figtext(0.02, 0.02, legend_text, fontsize=10,
-               bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+                bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
 
     plt.tight_layout()
 
-    # Guardar resultado
-    """
     if save_output:
-        output_path = image_path.replace('.jpg', '_detections.jpg').replace('.png', '_detections.png')
+        # opcional: guarda al lado de la imagen original
+        base, ext = os.path.splitext(image_path)
+        output_path = f"{base}_detections{ext}"
         plt.savefig(output_path, dpi=150, bbox_inches='tight')
         print(f"✓ Imagen guardada: {output_path}")
-    """
 
     plt.show()
 
@@ -1237,10 +1201,10 @@ def test_model_on_image(model_path, image_path, conf_threshold=0.2, save_output=
     print("DETECCIONES POR CLASE:")
     print("="*60)
     for class_name in Config.CLASS_NAMES:
-        count = sum(1 for d in detections if d['class_name'] == class_name)
-        if count > 0:
-            avg_conf = np.mean([d['obj_conf'] for d in detections if d['class_name'] == class_name])
-            print(f"  {class_name:<15}: {count:>3} detecciones (conf promedio: {avg_conf:.3f})")
+        class_dets = [d for d in detections if d['class_name'] == class_name]
+        if class_dets:
+            avg_conf = np.mean([d['obj_conf'] for d in class_dets])
+            print(f"  {class_name:<15}: {len(class_dets):>3} detecciones (conf promedio: {avg_conf:.3f})")
 
     return {
         'detections': detections,

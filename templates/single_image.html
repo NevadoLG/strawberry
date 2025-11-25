@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Clasificación de Imagen Única - Strawberry Vision{% endblock %}
+
+{% block content %}
+<section class="sv-page-header">
+    <h1>Clasificación de Imagen Única</h1>
+    <p>Sube una sola imagen para detectar y clasificar la madurez de las fresas.</p>
+</section>
+
+<section class="sv-single-grid">
+    <!-- CARD IZQUIERDA: UPLOAD -->
+    <div class="sv-upload-card">
+        <div id="drop-area" class="sv-drop-area">
+            <input type="file" id="file-input" accept="image/*" hidden>
+
+            <div id="drop-placeholder">
+                <p class="sv-drop-title">Arrastra y suelta una imagen aquí</p>
+                <p class="sv-drop-subtitle">o haz clic para seleccionar.</p>
+            </div>
+
+            <img id="preview-image" class="sv-preview-image hidden" alt="Vista previa" />
+        </div>
+
+        <div class="sv-upload-actions">
+            <button id="select-btn" class="sv-btn sv-btn-primary">
+                Seleccionar imagen
+            </button>
+            <button id="analyze-btn" class="sv-btn sv-btn-outline" disabled>
+                Analizar Imagen
+            </button>
+        </div>
+
+        <p id="status" class="sv-status-text"></p>
+    </div>
+
+    <!-- CARD DERECHA: RESULTADO -->
+    <div class="sv-result-card">
+        <h2>Resultado</h2>
+
+        <div id="result-annotated-wrapper" class="sv-result-image-wrapper hidden">
+            <img id="annotated-image" class="sv-result-image" alt="Resultado anotado" />
+        </div>
+
+        <div id="human-summary" class="sv-human-summary">
+            <p class="sv-summary-placeholder">
+                Sube una imagen y haz clic en <strong>Analizar Imagen</strong> para ver el resultado.
+            </p>
+        </div>
+
+        <details class="sv-debug-json">
+            <summary>Ver JSON (solo para desarrolladores)</summary>
+            <pre id="json-output"></pre>
+        </details>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='js/single_image.js') }}"></script>
+{% endblock %}
