@@ -1,0 +1,570 @@
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f5f5f7;
+    color: #111827;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Header / navbar */
+
+.sv-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.sv-header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sv-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.sv-logo-icon {
+    font-size: 1.4rem;
+}
+
+.sv-nav a {
+    margin-left: 1rem;
+    color: #4b5563;
+    font-size: 0.95rem;
+}
+
+.sv-nav a:hover {
+    color: #ef4444;
+}
+
+/* Layout */
+
+.sv-main {
+    max-width: 1100px;
+    margin: 1.5rem auto 3rem;
+    padding: 0 1.5rem;
+}
+
+.sv-footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #6b7280;
+    padding: 1.5rem 0 2rem;
+}
+
+/* Hero (home) */
+
+.sv-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
+    gap: 2rem;
+    align-items: center;
+    padding: 2rem 1.5rem;
+    background: linear-gradient(135deg, #fee2e2, #fef3c7);
+    border-radius: 1.5rem;
+}
+
+.sv-hero-text h1 {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.sv-hero-text p {
+    max-width: 480px;
+    color: #374151;
+}
+
+.sv-hero-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.sv-hero-image {
+    display: flex;
+    justify-content: center;
+}
+
+.sv-hero-placeholder {
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 30%, #f97373, #b91c1c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Buttons */
+
+.sv-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.sv-btn-primary {
+    background: #ef4444;
+    color: white;
+}
+
+.sv-btn-primary:hover {
+    background: #dc2626;
+}
+
+.sv-btn-outline,
+.sv-btn-secondary {
+    background: white;
+    color: #ef4444;
+    border-color: #fecaca;
+    border: 1px solid #fecaca;
+}
+
+.sv-btn-outline:hover,
+.sv-btn-secondary:hover {
+    background: #fee2e2;
+}
+
+
+/* Secciones genéricas */
+
+.sv-section {
+    margin-top: 2.5rem;
+}
+
+.sv-section h2 {
+    margin-bottom: 1.25rem;
+}
+
+/* Tarjetas y grid */
+
+.sv-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.sv-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+    border: 1px solid #e5e7eb;
+}
+
+.sv-link {
+    display: inline-flex;
+    margin-top: 0.75rem;
+    color: #ef4444;
+    font-weight: 500;
+}
+
+/* Page header */
+
+.sv-page-header {
+    margin-bottom: 1.5rem;
+}
+
+/* Single image layout */
+
+.sv-single-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 2fr);
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.sv-upload-card,
+.sv-result-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+    border: 1px solid #e5e7eb;
+}
+
+/* Dropzone */
+
+.sv-drop-area {
+    border: 2px dashed #f8a4aa;
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    background: #fff7f8;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.sv-drop-area.dragover {
+    border-color: #ff4b5c;
+    background: #ffecee;
+    transform: translateY(-1px);
+}
+
+.sv-preview-image {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 12px;
+    object-fit: contain;
+    margin-top: 12px;
+}
+
+.sv-upload-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.sv-status-text {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+/* Result image + summary */
+
+.sv-result-image-wrapper {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.sv-result-image {
+    max-width: 100%;
+    border-radius: 12px;
+}
+
+.sv-human-summary {
+    font-size: 0.95rem;
+}
+
+.sv-summary-list {
+    list-style: disc;
+    padding-left: 1.4rem;
+    margin-top: 8px;
+}
+
+.sv-chip-score {
+    font-size: 0.8rem;
+    background: #ffe1e5;
+    border-radius: 999px;
+    padding: 2px 8px;
+    margin-left: 4px;
+}
+
+.sv-debug-json {
+    margin-top: 16px;
+    font-size: 0.8rem;
+}
+
+/* Botones guardar historial en tarjetas */
+
+.sv-history-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Utilidades */
+
+.hidden {
+    display: none !important;
+}
+
+/* --------- Batch: layout formulario y resultados --------- */
+
+/* Ajuste de padding para secciones "grandes" como batch y resultados */
+.sv-section {
+  padding: 2.5rem 2rem;
+}
+
+.sv-section-subtitle {
+  margin-top: 0.25rem;
+  margin-bottom: 1.5rem;
+  color: #6b7280; /* gris suave */
+}
+
+/* Card de formulario centrada y más estrecha */
+.sv-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  padding: 1.75rem 2rem;
+  max-width: 900px;
+  margin: 0 auto 1.5rem;
+}
+
+/* Formulario de batch */
+
+#batch-form {
+  width: 100%;
+}
+
+.batch-form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem 2rem;
+}
+
+.batch-form-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group textarea,
+.form-group input[type="number"] {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+  outline: none;
+  background-color: #f9fafb;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="file"]:focus,
+.form-group textarea:focus,
+.form-group input[type="number"]:focus {
+  border-color: #f97316; /* naranja suave */
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.2);
+  background-color: #ffffff;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.hint-text {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Acciones del formulario */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+/* Botón primario tipo pill */
+.btn-primary {
+  padding: 0.6rem 1.3rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #f97316, #ec4899);
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 15px 30px rgba(236, 72, 153, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 40px rgba(236, 72, 153, 0.3);
+  filter: brightness(1.03);
+}
+
+/* Tabla de resultados del lote */
+
+.table-wrapper {
+  width: 100%;
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.sv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.sv-table thead {
+  background: #f3f4f6;
+}
+
+.sv-table th,
+.sv-table td {
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sv-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Card de resultados batch ligeramente separada */
+.sv-card-results {
+  margin-top: 1.5rem;
+}
+
+/* --------- Resultados (historial) --------- */
+
+.sv-results-section {
+  max-width: 1100px;
+  margin: 1.5rem auto 3rem;
+}
+
+.sv-history-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+
+.sv-history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sv-history-card {
+  max-width: 1100px;
+}
+
+.sv-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.sv-history-pill {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 500;
+}
+
+.sv-history-date {
+  color: #6b7280;
+}
+
+.sv-history-body p {
+  margin: 0.25rem 0;
+}
+
+.sv-history-class-list {
+  margin-top: 0.5rem;
+  padding-left: 1.3rem;
+}
+
+.sv-history-empty {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* --------- Responsive --------- */
+
+@media (max-width: 900px) {
+    .sv-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .sv-single-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sv-header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+  .sv-section {
+    padding: 1.5rem 1rem;
+  }
+
+  .sv-card {
+    padding: 1.25rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .batch-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem 0;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .form-actions .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.sv-history-toolbar {
+  margin-top: 0.5rem;
+}
+
+.sv-history-section {
+  margin-top: 1.5rem;
+}
+
+.sv-history-section h2 {
+  margin-bottom: 0.75rem;
+}
+
+.sv-empty-state {
+  margin-top: 1rem;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.sv-history-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+}

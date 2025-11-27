@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Strawberry Vision{% endblock %}
+
+{% block content %}
+<section class="sv-hero">
+    <div class="sv-hero-text">
+        <h1>Intelligent Strawberry Classification, Simplified.</h1>
+        <p>
+            Clasifica automáticamente el estado de crecimiento de tus fresas:
+            desde una sola imagen hasta lotes completos de producción.
+        </p>
+        <div class="sv-hero-actions">
+            <a class="sv-btn sv-btn-primary" href="{{ url_for('single_image_page') }}">
+                Probar una sola imagen
+            </a>
+            <a class="sv-btn sv-btn-outline" href="{{ url_for('batch_page') }}">
+                Procesar por lotes
+            </a>
+        </div>
+    </div>
+    <div class="sv-hero-image">
+        <div class="sv-hero-placeholder">
+            🍓
+        </div>
+    </div>
+</section>
+
+<section class="sv-section">
+    <h2>Elige tu modo de análisis</h2>
+    <div class="sv-cards-grid">
+        <article class="sv-card">
+            <h3>Clasificación de Imagen Única</h3>
+            <p>
+                Sube una foto y obtén las detecciones de fresas con su etapa de madurez.
+                Ideal para pruebas rápidas.
+            </p>
+            <a class="sv-link" href="{{ url_for('single_image_page') }}">Ir a Clasificación Única →</a>
+        </article>
+
+        <article class="sv-card">
+            <h3>Detección por Lotes</h3>
+            <p>
+                Procesa carpetas o archivos comprimidos con muchas imágenes.
+                Perfecto para monitoreo agrícola a gran escala.
+            </p>
+            <a class="sv-link" href="{{ url_for('batch_page') }}">Ir a Detección por Lotes →</a>
+        </article>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Resultados de Detección{% endblock %}
+
+{% block content %}
+<section class="sv-section">
+    <div class="sv-page-header">
+        <h1>Resultados de Detección</h1>
+        <p>
+            Aquí puedes revisar el historial local de ejecuciones que hayas guardado
+            desde la clasificación de imagen única o la detección por lotes
+            en este navegador.
+        </p>
+    </div>
+
+    <div class="sv-history-toolbar">
+        <button id="clear-history-btn" class="sv-btn sv-btn-outline">
+            Limpiar historial
+        </button>
+    </div>
+
+    <div id="history-container" class="sv-history-container" style="margin-top: 1.5rem;">
+        <!-- Aquí se inyectan las tablas desde results.js -->
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='js/results.js') }}"></script>
+{% endblock %}

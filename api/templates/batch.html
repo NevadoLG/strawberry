@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Detección por Lotes{% endblock %}
+
+{% block content %}
+<section class="sv-section">
+    <div class="sv-page-header">
+        <h1>Detección por Lotes</h1>
+        <p class="sv-section-subtitle">
+            Registra la información del lote y selecciona varias imágenes de fresas
+            para evaluar su etapa de crecimiento con el modelo.
+        </p>
+    </div>
+
+    <!-- CARD DEL FORMULARIO -->
+    <div class="sv-card">
+        <form id="batch-form" enctype="multipart/form-data" class="batch-form-grid">
+            <!-- Columna izquierda -->
+            <div class="form-group">
+                <label for="lote_id">ID del lote *</label>
+                <input
+                    type="text"
+                    id="lote_id"
+                    name="lote_id"
+                    placeholder="Ej.: LOTE-2025-01"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="location">Ubicación</label>
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="Ej.: Parcela 3 – Fundo X"
+                />
+            </div>
+
+            <!-- Descripción ocupa todo el ancho -->
+            <div class="form-group full-width">
+                <label for="description">Descripción del lote</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="3"
+                    placeholder="Variedad, fecha de muestreo, condiciones, etc."
+                ></textarea>
+            </div>
+
+            <!-- Input de imágenes, también ancho completo -->
+            <div class="form-group full-width">
+                <label for="batch_files">Imágenes del lote *</label>
+                <input
+                    type="file"
+                    id="batch_files"
+                    name="files"
+                    accept="image/*"
+                    multiple
+                    required
+                />
+                <small class="hint-text">
+                    Puedes seleccionar varias imágenes a la vez (hasta el límite recomendado).
+                </small>
+            </div>
+
+            <!-- Botón alineado al final -->
+            <div class="form-actions full-width">
+                <button type="submit" class="btn-primary">
+                    Procesar lote
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- CARD DE RESULTADOS -->
+    <div class="sv-card" id="batch-result-card" style="display:none; margin-top:1.5rem;">
+        <h2>Resultados del lote</h2>
+
+        <div id="batch-meta" class="batch-meta"></div>
+
+        <div class="table-wrapper">
+            <table id="batch-table" class="sv-table">
+                <thead>
+                    <tr>
+                        <th>Archivo</th>
+                        <th># detecciones</th>
+                        <th>Clases detectadas</th>
+                        <th>Confianza máx.</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="sv-history-actions" style="margin-top: 1rem; text-align: right;">
+            <button id="save-batch-history" class="sv-btn sv-btn-secondary" disabled>
+                Guardar lote en historial
+            </button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='js/batch.js') }}"></script>
+{% endblock %}

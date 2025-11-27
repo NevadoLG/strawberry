@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Strawberry Vision{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<header class="sv-header">
+    <div class="sv-header-inner">
+        <div class="sv-logo">
+            <span class="sv-logo-icon">🍓</span>
+            <span class="sv-logo-text">Strawberry Vision</span>
+        </div>
+        <nav class="sv-nav">
+            <a href="{{ url_for('home') }}">Inicio</a>
+            <a href="{{ url_for('single_image_page') }}">Clasificación de Imagen Única</a>
+            <a href="{{ url_for('batch_page') }}">Detección por Lotes</a>
+            <a href="{{ url_for('results_page') }}">Resultados</a>
+            <a href="{{ url_for('about_page') }}">Acerca de</a>
+        </nav>
+    </div>
+</header>
+
+<main class="sv-main">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="sv-footer">
+    <p>© 2025 Strawberry Vision. Todos los derechos reservados.</p>
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

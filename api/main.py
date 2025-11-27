@@ -1,9 +1,9 @@
 import os
 import base64
-from typing import Dict
+from typing import Dict, List
 
 import cv2
-from fastapi import FastAPI, File, HTTPException, UploadFile, Query, Request
+from fastapi import FastAPI, File, HTTPException, UploadFile, Query, Request, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -13,9 +13,9 @@ from inference_service import infer_from_bytes
 # =========================
 # RUTAS DE PROYECTO
 # =========================
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATES_DIR = os.path.join(ROOT_DIR, "templates")
-STATIC_DIR = os.path.join(ROOT_DIR, "static")
+API_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATES_DIR = os.path.join(API_DIR, "templates")
+STATIC_DIR = os.path.join(API_DIR, "static")
 
 app = FastAPI(title="Strawberry Vision API")
 
@@ -24,7 +24,6 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # Sistema de templates (Jinja2)
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
-
 
 # =========================
 # ENDPOINTS HTML (PÁGINAS)
@@ -78,18 +77,10 @@ def healthcheck() -> Dict[str, str]:
 @app.post("/predict")
 async def predict(
     file: UploadFile = File(...),
-    conf: float = Query(0.4, ge=0.05, le=0.9, description="Umbral de confianza"),
 ) -> JSONResponse:
-    """
-    Recibe una imagen, ejecuta el modelo y devuelve:
-      - metadatos de la imagen
-      - lista de detecciones
-      - resumen por clase
-      - imagen anotada en base64 (PNG)
-    """
     try:
         contents = await file.read()
-        result = infer_from_bytes(contents, conf_threshold=conf)
+        result = infer_from_bytes(contents, conf_threshold=0.4)
 
         annotated_bgr = result.pop("annotated_image_bgr")
         success, buffer = cv2.imencode(".png", annotated_bgr)
@@ -108,3 +99,56 @@ async def predict(
             status_code=500,
             detail=f"Error interno al procesar la imagen: {e}",
         ) from e
+
+@app.post("/predict-batch")
+async def predict_batch(
+    lote_id: str = Form(...),
+    location: str = Form(""),
+    description: str = Form(""),
+    files: List[UploadFile] = File(...),
+) -> JSONResponse:
+    if not files:
+        raise HTTPException(status_code=400, detail="No se enviaron imágenes.")
+
+    batch_results = []
+
+    for f in files:
+        try:
+            contents = await f.read()
+            # mismo umbral fijo
+            result = infer_from_bytes(contents, conf_threshold=0.4)
+
+            annotated_bgr = result.pop("annotated_image_bgr")
+            success, buffer = cv2.imencode(".png", annotated_bgr)
+            if not success:
+                raise RuntimeError("No se pudo codificar la imagen anotada.")
+
+            image_base64 = base64.b64encode(buffer).decode("utf-8")
+
+            batch_results.append(
+                {
+                    "filename": f.filename,
+                    **result,
+                    "annotated_image_base64": image_base64,
+                }
+            )
+        except Exception as e:  # noqa: BLE001
+            batch_results.append(
+                {
+                    "filename": f.filename,
+                    "error": str(e),
+                }
+            )
+
+    response = {
+        "batch_meta": {
+            "lote_id": lote_id,
+            "location": location,
+            "description": description,
+            "conf_threshold": 0.4,
+        },
+        "num_files": len(batch_results),
+        "results": batch_results,
+    }
+
+    return JSONResponse(content=response)
