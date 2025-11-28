@@ -1,13 +1,121 @@
 {% extends "base.html" %}
 
-{% block title %}Acerca de Strawberry Vision{% endblock %}
+{% block title %}Acerca de - Strawberry Vision{% endblock %}
 
 {% block content %}
 <section class="sv-section">
-    <h1>Acerca de Nuestra Tecnología</h1>
-    <p>
-        Aquí explicaremos el modelo de IA, el procesamiento por lotes (batch),
-        y cómo se integra con tecnologías como PySpark o pipelines de datos.
-    </p>
+
+    <!-- HERO PRINCIPAL -->
+    <header class="sv-about-hero">
+        <span class="sv-tag">Proyecto de Percepción Computacional 2025-2</span>
+        <h1>Acerca de Strawberry Vision</h1>
+        <p>
+            Strawberry Vision es un sistema de detección y clasificación de fresas a partir de imágenes.
+            Permite analizar una sola imagen o procesar lotes completos para apoyar tareas agrícolas
+            mediante visión por computadora y aprendizaje profundo.
+        </p>
+    </header>
+
+    <!-- GRID DE TARJETAS ABOUT -->
+    <div class="sv-about-grid">
+
+        <!-- OBJETIVOS DEL PROYECTO -->
+        <article class="sv-card sv-about-card sv-about-card-objectives">
+            <div class="sv-about-card-header">
+                <span class="sv-about-label">Objetivos</span>
+                <h2>Objetivos del proyecto</h2>
+                <p class="sv-about-card-subtitle">
+                    Metas principales que guían el diseño del modelo y de la aplicación web.
+                </p>
+            </div>
+
+            <div class="sv-about-card-body">
+                <ul class="sv-about-list">
+                    <li>Detectar fresas en imágenes usando YOLOv8.</li>
+                    <li>Clasificar la madurez: verde, semi-madura y madura.</li>
+                    <li>Procesar imágenes individuales o por lotes.</li>
+                    <li>Ofrecer una interfaz moderna, clara y fácil de usar.</li>
+                    <li>Aplicar conceptos básicos de MLOps y despliegue.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- TECNOLOGÍAS -->
+        <article class="sv-card sv-about-card sv-about-card-tech">
+            <div class="sv-about-card-header">
+                <span class="sv-about-label sv-about-label-purple">Tecnologías</span>
+                <h2>Tecnologías usadas</h2>
+                <p class="sv-about-card-subtitle">
+                    Herramientas utilizadas para el entrenamiento del modelo y el desarrollo del sistema.
+                </p>
+            </div>
+
+            <div class="sv-about-card-body">
+                <ul class="sv-about-list">
+                    <li><strong>Backend:</strong> Python, FastAPI, Uvicorn.</li>
+                    <li><strong>Visión y modelo:</strong> YOLOv8, PyTorch, OpenCV.</li>
+                    <li><strong>Frontend:</strong> HTML, CSS, JavaScript.</li>
+                    <li><strong>Dev & MLOps:</strong> Docker, LocalStorage, patrones de diseño.</li>
+                    <li><strong>Infraestructura y despliegue:</strong> Hostinger (hosting web del sistema).</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- EQUIPO DE DESARROLLO -->
+        <article class="sv-card sv-about-card sv-team-card sv-about-card-team">
+            <div class="sv-about-card-header">
+                <span class="sv-about-label sv-about-label-green">Equipo</span>
+                <h2>Equipo de desarrollo</h2>
+                <p class="sv-about-card-subtitle">
+                    Estudiantes de Ingeniería de Sistemas – Curso de Percepción Computacional 2025-2.
+                </p>
+            </div>
+
+            <div class="sv-about-card-body">
+                <div class="sv-team-grid">
+                    <div class="sv-team-item">
+                        <div class="sv-avatar">VB</div>
+                        <div class="sv-team-text">
+                            <h3>Brunelli Watanabe, Valeria</h3>
+                            <p>Arquitectura del sistema y documentación.</p>
+                        </div>
+                    </div>
+
+                    <div class="sv-team-item">
+                        <div class="sv-avatar">CD</div>
+                        <div class="sv-team-text">
+                            <h3>Dávalos Mendo, Charles Augustus</h3>
+                            <p>Entrenamiento del modelo y experimentos.</p>
+                        </div>
+                    </div>
+
+                    <div class="sv-team-item">
+                        <div class="sv-avatar">RE</div>
+                        <div class="sv-team-text">
+                            <h3>Escalante Díaz, Rodrigo</h3>
+                            <p>Arquitectura del sistema y backend.</p>
+                        </div>
+                    </div>
+
+                    <div class="sv-team-item">
+                        <div class="sv-avatar">AL</div>
+                        <div class="sv-team-text">
+                            <h3>León García, Axel Erico</h3>
+                            <p>Diseño de interfaz y despliegue.</p>
+                        </div>
+                    </div>
+
+                    <div class="sv-team-item">
+                        <div class="sv-avatar">JV</div>
+                        <div class="sv-team-text">
+                            <h3>Varas Quipuscoa, Jhoan Alessandro</h3>
+                            <p>Integración, pruebas y despliegue.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </div>
 </section>
 {% endblock %}

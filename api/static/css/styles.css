@@ -145,11 +145,11 @@ a {
     background: #fee2e2;
 }
 
-
 /* Secciones genéricas */
 
 .sv-section {
     margin-top: 2.5rem;
+    padding: 2.5rem 2rem;
 }
 
 .sv-section h2 {
@@ -165,11 +165,13 @@ a {
 }
 
 .sv-card {
-    background: white;
+    background: #ffffff;
     border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+    padding: 1.75rem 2rem;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
     border: 1px solid #e5e7eb;
+    max-width: 900px;
+    margin: 0 auto 1.5rem;
 }
 
 .sv-link {
@@ -297,209 +299,374 @@ a {
 
 /* --------- Batch: layout formulario y resultados --------- */
 
-/* Ajuste de padding para secciones "grandes" como batch y resultados */
-.sv-section {
-  padding: 2.5rem 2rem;
-}
-
 .sv-section-subtitle {
-  margin-top: 0.25rem;
-  margin-bottom: 1.5rem;
-  color: #6b7280; /* gris suave */
+    margin-top: 0.25rem;
+    margin-bottom: 1.5rem;
+    color: #6b7280;
 }
 
-/* Card de formulario centrada y más estrecha */
-.sv-card {
-  background: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
-  padding: 1.75rem 2rem;
-  max-width: 900px;
-  margin: 0 auto 1.5rem;
-}
-
-/* Formulario de batch */
+/* Formulario batch */
 
 #batch-form {
-  width: 100%;
+    width: 100%;
 }
 
 .batch-form-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 1rem 2rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem 2rem;
 }
 
 .batch-form-grid .full-width {
-  grid-column: 1 / -1;
+    grid-column: 1 / -1;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
 }
 
 .form-group label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #111827;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #111827;
 }
 
 .form-group input[type="text"],
 .form-group input[type="file"],
 .form-group textarea,
 .form-group input[type="number"] {
-  width: 100%;
-  padding: 0.55rem 0.75rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
-  font-size: 0.95rem;
-  outline: none;
-  background-color: #f9fafb;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease,
-    background-color 0.15s ease;
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    font-size: 0.95rem;
+    outline: none;
+    background-color: #f9fafb;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background-color 0.15s ease;
 }
 
 .form-group input[type="text"]:focus,
 .form-group input[type="file"]:focus,
 .form-group textarea:focus,
 .form-group input[type="number"]:focus {
-  border-color: #f97316; /* naranja suave */
-  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.2);
-  background-color: #ffffff;
+    border-color: #f97316;
+    box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.2);
+    background-color: #ffffff;
 }
 
 .form-group textarea {
-  resize: vertical;
-  min-height: 90px;
+    resize: vertical;
+    min-height: 90px;
 }
 
 .hint-text {
-  font-size: 0.8rem;
-  color: #6b7280;
+    font-size: 0.8rem;
+    color: #6b7280;
 }
 
 /* Acciones del formulario */
+
 .form-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.75rem;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
 }
 
 /* Botón primario tipo pill */
+
 .btn-primary {
-  padding: 0.6rem 1.3rem;
-  border-radius: 999px;
-  border: none;
-  background: linear-gradient(135deg, #f97316, #ec4899);
-  color: #ffffff;
-  font-weight: 500;
-  font-size: 0.95rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  box-shadow: 0 15px 30px rgba(236, 72, 153, 0.25);
-  transition: transform 0.15s ease, box-shadow 0.15s ease,
-    filter 0.15s ease;
+    padding: 0.6rem 1.3rem;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #f97316, #ec4899);
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: 0 15px 30px rgba(236, 72, 153, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease,
+        filter 0.15s ease;
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 20px 40px rgba(236, 72, 153, 0.3);
-  filter: brightness(1.03);
+    transform: translateY(-1px);
+    box-shadow: 0 20px 40px rgba(236, 72, 153, 0.3);
+    filter: brightness(1.03);
 }
 
-/* Tabla de resultados del lote */
+/* Tabla resultados lote */
 
 .table-wrapper {
-  width: 100%;
-  margin-top: 1rem;
-  overflow-x: auto;
+    width: 100%;
+    margin-top: 1rem;
+    overflow-x: auto;
 }
 
 .sv-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
 }
 
 .sv-table thead {
-  background: #f3f4f6;
+    background: #f3f4f6;
 }
 
 .sv-table th,
 .sv-table td {
-  padding: 0.55rem 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .sv-table tbody tr:hover {
-  background-color: #f9fafb;
+    background-color: #f9fafb;
 }
 
-/* Card de resultados batch ligeramente separada */
 .sv-card-results {
-  margin-top: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 /* --------- Resultados (historial) --------- */
 
 .sv-results-section {
-  max-width: 1100px;
-  margin: 1.5rem auto 3rem;
+    max-width: 1100px;
+    margin: 1.5rem auto 3rem;
 }
 
 .sv-history-toolbar {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
 }
 
 .sv-history-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .sv-history-card {
-  max-width: 1100px;
+    max-width: 1100px;
 }
 
 .sv-history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
 }
 
 .sv-history-pill {
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  background: #fee2e2;
-  color: #b91c1c;
-  font-weight: 500;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-weight: 500;
 }
 
 .sv-history-date {
-  color: #6b7280;
+    color: #6b7280;
 }
 
 .sv-history-body p {
-  margin: 0.25rem 0;
+    margin: 0.25rem 0;
 }
 
 .sv-history-class-list {
-  margin-top: 0.5rem;
-  padding-left: 1.3rem;
+    margin-top: 0.5rem;
+    padding-left: 1.3rem;
 }
 
-.sv-history-empty {
-  color: #6b7280;
-  font-size: 0.95rem;
+.sv-history-empty,
+.sv-empty-state {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.sv-history-section {
+    margin-top: 1.5rem;
+}
+
+.sv-history-section h2 {
+    margin-bottom: 0.75rem;
+}
+
+/* ==========================
+   About: cabecera
+   ========================== */
+
+.sv-about-hero {
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    text-align: left;
+    padding: 1.75rem 2rem;
+    border-radius: 1.5rem;
+    background: radial-gradient(circle at top left, #fee2e2 0, #f9fafb 45%, #eef2ff 100%);
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+}
+
+.sv-about-hero h1 {
+    font-size: 2.1rem;
+    margin: 0.4rem 0 0.75rem;
+}
+
+.sv-about-hero p {
+    margin: 0;
+    max-width: 640px;
+    color: #4b5563;
+    font-size: 0.98rem;
+}
+
+/* pill de arriba */
+
+.sv-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    background: rgba(248, 113, 113, 0.08);
+    color: #b91c1c;
+    border: 1px solid rgba(248, 113, 113, 0.25);
+}
+
+/* ==========================
+   About: tarjetas secciones
+   ========================== */
+
+.sv-about-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Card con layout dos columnas: etiqueta + contenido */
+
+.sv-about-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 2fr);
+    gap: 1.25rem 2rem;
+    align-items: flex-start;
+}
+
+.sv-about-card-header {
+    padding-right: 0.5rem;
+}
+
+.sv-about-card-header h2 {
+    margin: 0.35rem 0 0.35rem;
+}
+
+.sv-about-card-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.sv-about-card-body {
+    font-size: 0.95rem;
+}
+
+.sv-about-list {
+    list-style: disc;
+    padding-left: 1.4rem;
+    margin: 0;
+}
+
+.sv-about-list li + li {
+    margin-top: 0.25rem;
+}
+
+/* Etiquetas de cada card ("Objetivos", "Tecnologías", "Equipo") */
+
+.sv-about-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    background: rgba(248, 113, 113, 0.08);
+    color: #b91c1c;
+    border: 1px solid rgba(248, 113, 113, 0.25);
+}
+
+.sv-about-label-purple {
+    background: rgba(129, 140, 248, 0.08);
+    color: #4f46e5;
+    border-color: rgba(129, 140, 248, 0.25);
+}
+
+.sv-about-label-green {
+    background: rgba(52, 211, 153, 0.08);
+    color: #047857;
+    border-color: rgba(52, 211, 153, 0.25);
+}
+
+/* ==========================
+   About: equipo
+   ========================== */
+
+.sv-team-card h2 {
+    margin-bottom: 0.25rem;
+}
+
+.sv-team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem 1.5rem;
+}
+
+.sv-team-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.sv-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #ffffff;
+    background: linear-gradient(135deg, #f97316, #ec4899);
+    box-shadow: 0 10px 20px rgba(236, 72, 153, 0.25);
+    flex-shrink: 0;
+}
+
+.sv-team-text h3 {
+    font-size: 0.95rem;
+    margin: 0 0 0.15rem 0;
+}
+
+.sv-team-text p {
+    font-size: 0.85rem;
+    margin: 0;
+    color: #6b7280;
 }
 
 /* --------- Responsive --------- */
@@ -518,53 +685,80 @@ a {
         align-items: flex-start;
         gap: 0.5rem;
     }
+
+    .sv-about-card {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
-  .sv-section {
-    padding: 1.5rem 1rem;
-  }
+    .sv-section {
+        padding: 1.5rem 1rem;
+    }
 
-  .sv-card {
-    padding: 1.25rem 1.25rem;
-    margin-bottom: 1rem;
-  }
+    .sv-card {
+        padding: 1.25rem 1.25rem;
+        margin-bottom: 1rem;
+    }
 
-  .batch-form-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.75rem 0;
-  }
+    .batch-form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.75rem 0;
+    }
 
-  .form-actions {
-    justify-content: stretch;
-  }
+    .form-actions {
+        justify-content: stretch;
+    }
 
-  .form-actions .btn-primary {
-    width: 100%;
-    justify-content: center;
-  }
+    .form-actions .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .sv-about-hero {
+        padding: 1.4rem 1.3rem;
+        border-radius: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sv-about-hero h1 {
+        font-size: 1.7rem;
+    }
 }
 
-.sv-history-toolbar {
-  margin-top: 0.5rem;
+@media (max-width: 640px) {
+    .sv-team-item {
+        padding: 0.65rem 0.8rem;
+    }
+
+    .sv-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 0.85rem;
+    }
+}
+/* Variantes con degradado suave para cada sección */
+
+.sv-about-card-objectives {
+    background: radial-gradient(circle at top left,
+        #fee2e2 0,
+        #fff7f7 45%,
+        #fef9f5 100%);
+    border-color: rgba(248, 113, 113, 0.18);
 }
 
-.sv-history-section {
-  margin-top: 1.5rem;
+.sv-about-card-tech {
+    background: radial-gradient(circle at top left,
+        #e0e7ff 0,
+        #f5f3ff 45%,
+        #f9fafb 100%);
+    border-color: rgba(129, 140, 248, 0.22);
 }
 
-.sv-history-section h2 {
-  margin-bottom: 0.75rem;
-}
-
-.sv-empty-state {
-  margin-top: 1rem;
-  color: #6b7280;
-  font-size: 0.95rem;
-}
-
-.sv-history-actions {
-  margin-top: 0.75rem;
-  display: flex;
-  justify-content: flex-end;
+.sv-about-card-team {
+    background: radial-gradient(circle at top left,
+        #dcfce7 0,
+        #f0fdf4 45%,
+        #f9fafb 100%);
+    border-color: rgba(52, 211, 153, 0.22);
 }
