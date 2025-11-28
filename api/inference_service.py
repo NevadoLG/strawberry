@@ -7,14 +7,13 @@ import cv2
 import numpy as np
 import torch
 
-# --- Añadir carpeta src al path para importar core.model ---
 API_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(API_DIR)
 SRC_PATH = os.path.join(PROJECT_ROOT, "src")
 if SRC_PATH not in sys.path:
     sys.path.append(SRC_PATH)
 
-from core.model import Config, SGSNet, get_transforms, non_max_suppression  # type: ignore
+from core.model import Config, SGSNet, get_transforms, non_max_suppression
 
 
 device = Config.DEVICE
@@ -204,7 +203,6 @@ def infer_from_bytes(
 
     # Ordenar por score (mayor a menor)
     detections.sort(key=lambda d: d["score"], reverse=True)
-    # máximo por clase (ej. 10)
     MAX_PER_CLASS = 10
     by_class = {}
     filtered = []

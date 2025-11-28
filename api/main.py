@@ -31,7 +31,6 @@ templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 @app.get("/", response_class=HTMLResponse, name="home")
 def home(request: Request):
-    # IMPORTANTE: usamos index.html, no home.html
     return templates.TemplateResponse(
         "index.html",
         {"request": request},
@@ -94,7 +93,7 @@ async def predict(
 
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         raise HTTPException(
             status_code=500,
             detail=f"Error interno al procesar la imagen: {e}",
@@ -115,7 +114,6 @@ async def predict_batch(
     for f in files:
         try:
             contents = await f.read()
-            # mismo umbral fijo
             result = infer_from_bytes(contents, conf_threshold=0.4)
 
             annotated_bgr = result.pop("annotated_image_bgr")
@@ -132,7 +130,7 @@ async def predict_batch(
                     "annotated_image_base64": image_base64,
                 }
             )
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             batch_results.append(
                 {
                     "filename": f.filename,
