@@ -4,25 +4,130 @@
 
 {% block content %}
 <section class="sv-section">
-    <div class="sv-page-header">
-        <h1>Resultados de Detección</h1>
-        <p>
-            Aquí puedes revisar el historial local de ejecuciones que hayas guardado
-            desde la clasificación de imagen única o la detección por lotes
-            en este navegador.
-        </p>
+  <div class="sv-page-header">
+    <h1>Resultados de Detección</h1>
+    <p class="sv-section-subtitle">
+      Aquí puedes revisar el historial local de ejecuciones que hayas guardado
+      desde la clasificación de imagen única o la detección por lotes en este
+      navegador.
+    </p>
+  </div>
+
+  <div class="sv-card">
+    <div class="sv-card-header">
+      <button id="clear-history" class="sv-btn sv-btn-outline-danger">
+        Limpiar historial
+      </button>
     </div>
 
-    <div class="sv-history-toolbar">
-        <button id="clear-history-btn" class="sv-btn sv-btn-outline">
-            Limpiar historial
-        </button>
+    <!-- Mensaje cuando NO hay historial -->
+    <div id="no-history-msg" class="sv-empty-state">
+      No tienes historial guardado todavía.
+      Procesa una imagen o un lote y usa el botón
+      <strong>"Guardar en historial"</strong>.
     </div>
 
-    <div id="history-container" class="sv-history-container" style="margin-top: 1.5rem;">
-        <!-- Aquí se inyectan las tablas desde results.js -->
+    <!-- Historial de imagen única -->
+    <div id="single-history-card" class="sv-history-block" style="display:none;">
+      <h2>Historial: Clasificación de Imagen Única</h2>
+      <div class="table-wrapper">
+        <table id="single-history-table" class="sv-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Archivo</th>
+              <th># detecciones</th>
+              <th>Ver</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
+
+    <!-- Historial de lotes -->
+    <div id="batch-history-card" class="sv-history-block" style="display:none; margin-top:1.5rem;">
+      <h2>Historial: Detección por Lotes</h2>
+      <div class="table-wrapper">
+        <table id="batch-history-table" class="sv-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>ID lote</th>
+              <th>Ubicación</th>
+              <th># archivos</th>
+              <th>Ver</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </section>
+
+<!-- ========== MODAL IMAGEN ÚNICA ========== -->
+<div id="single-modal" class="sv-modal" style="display:none;">
+  <div class="sv-modal-backdrop"></div>
+  <div class="sv-modal-dialog">
+    <div class="sv-modal-header">
+      <h3 id="single-modal-title">Detalle de imagen</h3>
+      <button
+        class="sv-modal-close"
+        data-modal-close="single-modal"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+    </div>
+    <div class="sv-modal-body single-modal-body">
+      <div class="single-modal-image-wrapper">
+        <img id="single-modal-img" alt="Imagen anotada" />
+      </div>
+      <div class="single-modal-info-wrapper">
+        <p id="single-modal-info"></p>
+        <ul id="single-modal-list" class="single-modal-list"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MODAL LOTE ========== -->
+<div id="batch-modal" class="sv-modal" style="display:none;">
+  <div class="sv-modal-backdrop"></div>
+  <div class="sv-modal-dialog sv-modal-lg">
+    <div class="sv-modal-header">
+      <h3 id="batch-modal-title">Detalle del lote</h3>
+      <button
+        class="sv-modal-close"
+        data-modal-close="batch-modal"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
+    </div>
+    <div class="sv-modal-body">
+      <p id="batch-modal-info" class="batch-modal-info"></p>
+
+      <div id="batch-classes-chart" class="batch-classes-chart"></div>
+
+      <div class="table-wrapper" style="margin-top:1.5rem;">
+        <table id="batch-modal-table" class="sv-table">
+          <thead>
+            <tr>
+              <th>Archivo</th>
+              <th># detecciones</th>
+              <th>Clases detectadas</th>
+              <th>Confianza máx.</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}

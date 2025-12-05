@@ -1,7 +1,7 @@
 import os
 import base64
 from typing import Dict, List
-
+from pathlib import Path
 import cv2
 from fastapi import FastAPI, File, HTTPException, UploadFile, Query, Request, Form
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -10,6 +10,13 @@ from fastapi.templating import Jinja2Templates
 
 from inference_service import infer_from_bytes
 
+MAX_FILES = 50     
+MAX_MB_PER_FILE = 5     
+ALLOWED_CT = {
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+}
 # =========================
 # RUTAS DE PROYECTO
 # =========================
@@ -106,14 +113,47 @@ async def predict_batch(
     description: str = Form(""),
     files: List[UploadFile] = File(...),
 ) -> JSONResponse:
+
+    # 0) Validar que lleguen archivos
     if not files:
         raise HTTPException(status_code=400, detail="No se enviaron imágenes.")
+
+    # 1) Límite de cantidad
+    if len(files) > MAX_FILES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Máximo {MAX_FILES} imágenes por lote."
+        )
 
     batch_results = []
 
     for f in files:
         try:
+            # 2) Validar tipo de archivo
+            if f.content_type not in ALLOWED_CT:
+                batch_results.append(
+                    {
+                        "filename": f.filename,
+                        "error": f"Tipo de archivo no permitido ({f.content_type}). "
+                                 f"Solo JPG, PNG o WEBP.",
+                    }
+                )
+                continue  # pasa al siguiente archivo
+
+            # 3) Leer contenido y validar tamaño
             contents = await f.read()
+            size_mb = len(contents) / (1024 * 1024)
+            if size_mb > MAX_MB_PER_FILE:
+                batch_results.append(
+                    {
+                        "filename": f.filename,
+                        "error": f"El archivo pesa {size_mb:.2f} MB, "
+                                 f"máximo permitido: {MAX_MB_PER_FILE} MB.",
+                    }
+                )
+                continue
+
+            # 4) Inferencia con tu CNN (ya lo tenías)
             result = infer_from_bytes(contents, conf_threshold=0.4)
 
             annotated_bgr = result.pop("annotated_image_bgr")
@@ -130,6 +170,7 @@ async def predict_batch(
                     "annotated_image_base64": image_base64,
                 }
             )
+
         except Exception as e:
             batch_results.append(
                 {

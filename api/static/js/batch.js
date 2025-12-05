@@ -6,7 +6,7 @@ const batchMetaDiv = document.getElementById("batch-meta");
 const batchTableBody = document.querySelector("#batch-table tbody");
 const saveBatchHistoryBtn = document.getElementById("save-batch-history");
 
-let lastBatchResponse = null; // guardamos el último resultado del lote
+let lastBatchResponse = null;
 
 batchForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -15,6 +15,11 @@ batchForm.addEventListener("submit", async (e) => {
     alert("Selecciona al menos una imagen para el lote.");
     return;
   }
+
+  if (batchFilesInput.files.length > 50) {
+  alert("Máximo 50 imágenes por lote.");
+  return;
+}
 
   const loteId = document.getElementById("lote_id").value.trim();
   const location = document.getElementById("location").value.trim();
@@ -119,7 +124,6 @@ batchForm.addEventListener("submit", async (e) => {
     alert(`Ocurrió un error al procesar el lote: ${err.message}`);
   }
 });
-
 // --------- Guardar lote en historial (localStorage) ---------
 saveBatchHistoryBtn.addEventListener("click", () => {
   if (!lastBatchResponse) {

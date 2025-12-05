@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveHistoryBtn = document.getElementById("save-history-single");
 
   let currentFile = null;
-  let lastResultData = null; // <-- aquí guardamos el último resultado
+  let lastResultData = null; // último resultado para guardar en historial
 
   function setFile(file) {
     if (!file) return;
@@ -145,8 +145,15 @@ document.addEventListener("DOMContentLoaded", () => {
       delete debugCopy.annotated_image_base64;
       jsonOutput.textContent = JSON.stringify(debugCopy, null, 2);
 
-      // Guardamos el último resultado en memoria para el botón de guardar
+      // Guardamos el último resultado en memoria
       lastResultData = data;
+
+      // (opcional, pero útil si luego quisieras usar window.lastResult)
+      window.lastResult = {
+        ...data,
+        filename: currentFile ? currentFile.name : "imagen_sin_nombre",
+      };
+
       saveHistoryBtn.disabled = false;
     } catch (err) {
       console.error(err);
